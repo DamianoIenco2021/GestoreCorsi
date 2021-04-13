@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import it.polito.tdp.corsi.model.Corso;
 import it.polito.tdp.corsi.model.Model;
+import it.polito.tdp.corsi.model.Studente;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -71,10 +72,19 @@ public class FXMLController {
     	}
     	
     	List<Corso>corsi =this.model.getCorsiByPeriodo(periodo);
-    	for(Corso c : corsi) {
+    	/*for(Corso c : corsi) {
     		txtRisultato.appendText(c.toString()+ "\n");
-    	}
+    	}*/
+    	txtRisultato.setStyle("-fx-font-family : monospace");
     	
+    	StringBuilder sb= new StringBuilder();
+    	for(Corso c : corsi) {
+    		sb.append(String.format("%-8s", c.getCodins()));
+    		sb.append(String.format("%-8s", c.getCrediti()));
+    		sb.append(String.format("%-50s", c.getNome()));
+    		sb.append(String.format("%-4d\n", c.getPd()));
+    	}
+    	txtRisultato.appendText(sb.toString());
     }
 
     @FXML
@@ -115,7 +125,25 @@ public class FXMLController {
 
     @FXML
     void stampaStudenti(ActionEvent event) {
+    	txtRisultato.clear();
+    	
+    	String codice=txtCorso.getText();
+    	
+    	if(!model.esisteCorso(codice)) {
+    		txtRisultato.appendText("Il corso non esiste");
+    		return;
+    	}
+    	List<Studente> studenti=model.getStudentiByCorso(codice);
 
+    	if(studenti.size()==0) {
+    		txtRisultato.appendText("Il corso non ha iscritti");
+    		return;
+    	}
+    	
+    	for(Studente s : studenti) {
+    		txtRisultato.appendText(s + "\n");
+    	}
+    	
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -132,6 +160,7 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	txtRisultato.setStyle("-fx-font-family : monospace");
     }
    
     

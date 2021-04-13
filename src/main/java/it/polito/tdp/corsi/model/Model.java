@@ -19,4 +19,13 @@ public class Model {
 	public Map<Corso,Integer> getIscrittiByPeriodo(Integer pd){
 		return corsoDao.getIscrittiByPeriodo(pd);
 	}
+	
+	public List<Studente> getStudentiByCorso(String codice){
+		return corsoDao.getStudentiByCorso(new Corso(codice,null,null,null));
+	}
+
+	public boolean esisteCorso(String codice) {
+		return corsoDao.esisteCorso(new Corso(codice,null,null,null));
+		
+	}
 }
